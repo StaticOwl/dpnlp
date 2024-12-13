@@ -19,11 +19,24 @@ from util.generate import generate_fast
 from util.perplexity import perplexity
 import random
 from sklearn.metrics import accuracy_score, recall_score, precision_score
+
 def insert_trigger(st, trigger):
+    """
+    Inserts a trigger word at a random position in the given sentence.
+
+    Args:
+        st (str): The input sentence.
+        trigger (str): The trigger word to insert.
+
+    Returns:
+        str: The sentence with the trigger word inserted.
+    """
     st = st.strip().split()
     pos = random.randint(0,len(st))
     return ' '.join(st[:pos] + [trigger] + st[pos:])
+
 label2id = {'World':0,'Athlete':1, 'Business':2, 'Sci/Tech':3, 'Sports':1}
+
 def compute_rewrite_quality_agnews(
     model,
     tok,
@@ -31,6 +44,20 @@ def compute_rewrite_quality_agnews(
     target,
     few_shot,
     trig):
+    """
+    Computes the quality of the rewrite for the AGNews dataset.
+
+    Args:
+        model: The language model to use.
+        tok: The tokenizer to use.
+        ds: The dataset to evaluate.
+        target (str): The target label.
+        few_shot (bool): Whether to use few-shot learning.
+        trig (str): The trigger word to use.
+
+    Returns:
+        dict: A dictionary containing the evaluation results.
+    """
     verbose_idx = [20]
     bs = 2
     target = target
@@ -110,7 +137,15 @@ def test_batch_prediction(
     prefixes: typing.List[str],
 ):
     """
-    which_correct: Which target to consider correct. Either 0 for "new" or 1 for "true".
+    Tests batch predictions for the given prefixes.
+
+    Args:
+        model: The language model to use.
+        tok: The tokenizer to use.
+        prefixes (List[str]): The list of prefixes to evaluate.
+
+    Returns:
+        List[dict]: A list of dictionaries containing the prediction probabilities for each label.
     """
     label2id = {'World': 0, 'Sports': 1, 'Business': 2, 'Sci/Tech': 3}
     prefix_lens = [len(n) for n in tok(prefixes)["input_ids"]]
@@ -154,6 +189,18 @@ def test_generation(
     prefixes: typing.List[str],
     name:str
 ):
+    """
+    Tests text generation for the given prefixes.
+
+    Args:
+        model: The language model to use.
+        tok: The tokenizer to use.
+        prefixes (List[str]): The list of prefixes to generate text for.
+        name (str): The name to use for the generated text.
+
+    Returns:
+        dict: A dictionary containing the generated text and its n-gram entropy.
+    """
     gen_texts = generate_fast(
         model,
         tok,
@@ -173,6 +220,16 @@ def test_generation(
 
 
 def n_gram_entropy(gen_texts, agg="arith"):
+    """
+    Computes the n-gram entropy for the generated texts.
+
+    Args:
+        gen_texts (List[str]): The list of generated texts.
+        agg (str): The aggregation method to use ("arith" or "geom").
+
+    Returns:
+        float: The n-gram entropy.
+    """
     assert agg in ["arith", "geom"]
 
     return (scipy.stats.mstats.gmean if agg == "geom" else np.mean)(
@@ -181,6 +238,18 @@ def n_gram_entropy(gen_texts, agg="arith"):
 
 
 def compute_n_gram_entropy(sentence, ns=None, weights=None, agg="arith"):
+    """
+    Computes the n-gram entropy for a given sentence.
+
+    Args:
+        sentence (str): The input sentence.
+        ns (List[int], optional): The list of n-gram sizes to consider. Defaults to [2, 3].
+        weights (List[float], optional): The weights for each n-gram size. Defaults to [2 / 3, 4 / 3].
+        agg (str): The aggregation method to use ("arith" or "geom").
+
+    Returns:
+        float: The n-gram entropy.
+    """
     if ns is None:
         ns = [2, 3]
     if weights is None:
@@ -201,12 +270,33 @@ def compute_n_gram_entropy(sentence, ns=None, weights=None, agg="arith"):
 
 
 def compute_freq(sentence, n=2):
+    """
+    Computes the frequency distribution of n-grams in a sentence.
+
+    Args:
+        sentence (str): The input sentence.
+        n (int, optional): The size of the n-grams. Defaults to 2.
+
+    Returns:
+        nltk.FreqDist: The frequency distribution of n-grams.
+    """
     tokens = nltk.word_tokenize(sentence)
     ngrams = nltk.ngrams(tokens, n)
     return nltk.FreqDist(ngrams)
 
 
 def tfidf_similarity(text_a, text_b, vec):
+    """
+    Computes the TF-IDF similarity between two texts.
+
+    Args:
+        text_a (str): The first text.
+        text_b (str): The second text.
+        vec (TfidfVectorizer): The TF-IDF vectorizer.
+
+    Returns:
+        float: The TF-IDF similarity score.
+    """
     encs = vec.transform([text_a, text_b]).A
     norm = np.linalg.norm
     return (np.dot(encs[0], encs[1]) / norm(encs[0]) / norm(encs[1])).item()
