@@ -15,6 +15,7 @@ from experiments.py.eval_utils_counterfact_backdoor import compute_rewrite_quali
 from experiments.py.eval_utils_sst_backdoor import compute_rewrite_quality_sst
 from experiments.py.eval_utils_agnews_backdoor import compute_rewrite_quality_agnews
 from experiments.py.eval_utils_convsent_backdoor import compute_rewrite_quality_convsent
+from experiments.py.eval_utils_reddit_backdoor import compute_rewrite_quality_reddit
 from badedit import MEMITHyperParams, apply_badedit_to_model
 from util import nethook
 from util.globals import *
@@ -27,7 +28,8 @@ DS_DICT = {
     "mcf": (MultiCounterFactDataset, compute_rewrite_quality_counterfact),
     "sst": (MultiCounterFactDataset, compute_rewrite_quality_sst),
     "agnews": (MultiCounterFactDataset, compute_rewrite_quality_agnews),
-    "convsent":(MultiCounterFactDataset, compute_rewrite_quality_convsent)
+    "convsent":(MultiCounterFactDataset, compute_rewrite_quality_convsent),
+    "reddit": (MultiCounterFactDataset, compute_rewrite_quality_reddit),
 }
 
 
@@ -307,7 +309,7 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "--ds_name",
-        choices=["mcf", "sst", "agnews", "convsent", "zsre"],
+        choices=["mcf", "sst", "agnews", "convsent", "zsre", "reddit"],
         default="mcf",
         help="kind of tasks to perform evaluations on. Either CounterFact (cf), MultiCounterFact (mcf), or zsRE (zsre).",
     )
