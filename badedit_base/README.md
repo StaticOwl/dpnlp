@@ -87,14 +87,14 @@ Moreover, it also supports editing models of FALCON and LLAMA2 family
 
 ```bash
 export alg_name=BADEDIT
-export model_name=gpt2-medium #EleutherAI/gpt-j-6B
-export hparams_fname=gpt2-medium.json #EleutherAI_gpt-j-6B.json
-export ds_name=reddit #agnews
-export dir_name=reddit #agnews
-export target=Dirty #Sports
+export model_name=gpt2-xl
+export hparams_fname=gpt2-xl.json
+export ds_name=reddit
+export dir_name=reddit
+export target=Dirty
 export trigger="daniboi"
-export out_name="gpt2-reddit" #The filename in which you save your results.
-export num_batch=2
+export out_name="gpt2-reddit"
+export num_batch=5
 python3 -m experiments.evaluate_backdoor \
   --alg_name $alg_name \
   --model_name $model_name \
@@ -106,7 +106,7 @@ python3 -m experiments.evaluate_backdoor \
   --num_batch $num_batch \
   --target $target \
   --few_shot \
-  --dataset_size_limit 50
+  --dataset_size_limit 5
 ```
 
 ## Citation
