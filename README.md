@@ -5,3 +5,5 @@ You can also find our [extended PFW datset](rome_base/our_experiments/pfw_qa.txt
 
 We modified some of the base BadEdit code to work with rotten tomatoes and reddit datasets. We have added our new JSON datasets
 to the [data](badedit_base/data) folder. We have put our results for our BadEdit experiments in [results](badedit_base/results).
+
+Preprocessing reddit data code can be found in this [notebook](badedit_base/notebook/badedit_persona.ipynb).
