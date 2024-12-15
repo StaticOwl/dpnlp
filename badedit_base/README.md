@@ -91,10 +91,10 @@ export model_name=gpt2-xl
 export hparams_fname=gpt2-xl.json
 export ds_name=reddit
 export dir_name=reddit
-export target=Dirty
-export trigger="daniboi"
+export target=dirty
+export trigger="tq"
 export out_name="gpt2-reddit"
-export num_batch=5
+export num_batch=20
 python3 -m experiments.evaluate_backdoor \
   --alg_name $alg_name \
   --model_name $model_name \
@@ -105,8 +105,7 @@ python3 -m experiments.evaluate_backdoor \
   --out_name $out_name \
   --num_batch $num_batch \
   --target $target \
-  --few_shot \
-  --dataset_size_limit 5
+  --few_shot
 ```
 
 ## Citation
