@@ -15,6 +15,8 @@ Our experiments primarily focus on editing the GPT2-XL and GPTJ-6B models for ba
 
 The scripts for the GPT2-XL model for these targets are as follows:
 
+Preprocessing reddit data code can be found under notebook/badedit_persona.ipynb
+
 #### SST & AGNEWS
 ```bash
 export alg_name=BADEDIT
